@@ -1,4 +1,4 @@
-// (function() {
+(function() {
   var foodgroups = ['Fresh/Frozen fruit','Canned Fruit','Fruit Juice','Fresh/Frozen dark green vegetables','Canned dark green vegetables','Fresh/Frozen orange vegetables','Canned orange vegetables','Fresh/Frozen starchy vegetables','Canned starchy vegetables','Fresh/Frozen select nutrient vegetables','Canned select nutrients','Fresh/Frozen other vegetables','Canned other vegetables','Frozen/Dried Legumes','Canned Legumes'];
 
   d3.csv('data/fruitveg.csv', function(data) {
@@ -114,4 +114,4 @@
          .text(data[0].foodgroup)
          .attr('dy', '-0.5em');
   }
-// })();
+})();
