@@ -1,0 +1,82 @@
+h1, h4, h5 {
+  font-family: "Karla";
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+h4 {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+h5 {
+  margin-top: 5px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+h4 a {
+  color: steelblue;
+}
+
+h4 a:hover {
+  text-decoration: none;
+}
+
+svg {
+  display: block;
+  margin: auto;
+}
+
+.counties {
+  fill: none;
+}
+
+.states {
+  fill: none;
+  stroke: rgb(255,255,255);
+  stroke-linejoin: round;
+}
+
+.q0-5,
+.q1-5,
+.q2-5,
+.q3-5,
+.q4-5 {
+  opacity: 0.8;
+}
+
+.q0-5 {
+  fill: rgb(255,255,204);
+}
+
+.q1-5 {
+  fill: rgb(194,230,153);
+}
+
+.q2-5 {
+  fill: rgb(120,198,121);
+}
+
+.q3-5 {
+  fill: rgb(49,163,84);
+}
+
+.q4-5 {
+  fill: rgb(0,104,55);
+}
+
+.tooltip {   
+  position: absolute;           
+  font-family: "Karla";
+  font-weight: 700;
+  text-shadow:
+   -1px -1px 0 rgb(255,255,255),  
+    1px -1px 0 rgb(255,255,255),
+    -1px 1px 0 rgb(255,255,255),
+     1px 1px 0 rgb(255,255,255);
+}
+}
