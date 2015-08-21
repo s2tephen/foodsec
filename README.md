@@ -5,9 +5,7 @@ Visualizations based on USDA's Quarterly Food-at-Home Price Database and other f
 
 The Quarterly Food-at-Home Price Database estimates the price of different groceries (in $/100g) by food group and region. This visualization takes the data around fruit and vegetable prices in Boston and graphs them as small multiples. A more [in-depth write-up](http://cms631.datatherapy.org/2015/04/16/how-much-do-fruits-vegetables-cost-in-boston) can be found on the CMS.631 blog.
 
-![Liquor consumption by nation (Quartz)](https://qzprod.files.wordpress.com/2014/01/liquor-consumption2.png?w=640)
-
-This was inspired by this Quartz chart on liquor consumption by nation, where the small multiples all share axes/ticks, with an annotation at the end to indicate the current value. More work will be done on the underlying code, with the goal of abstracting it out to turn into some sort of online small multiple creation tool.
+This was inspired by this [Quartz chart on liquor consumption by nation](https://qzprod.files.wordpress.com/2014/01/liquor-consumption2.png?w=640), where the small multiples all share axes/ticks, with an annotation at the end to indicate the current value. More work will be done on the underlying code, with the goal of abstracting it out to turn into some sort of online small multiple creation tool.
 
 ## [Map](http://stephensuen.com/foodsec/map)
 
