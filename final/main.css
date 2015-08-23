@@ -1,0 +1,61 @@
+h1, h4 {
+  font-family: 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+h4 {
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+a {
+  color: rgb(0,0,0);
+  text-decoration: none;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0) 90%, rgba(119,123,145,0.6) 95%);
+  transition: color 0.15s ease-in;
+}
+
+a:hover,
+a:focus {
+  color: rgb(252,141,89);
+}
+
+svg {
+  display: block;
+  margin: auto;
+}
+
+.counties {
+  fill: none;
+}
+
+.states {
+  fill: none;
+  stroke: rgb(255,255,255);
+  stroke-linejoin: round;
+}
+
+.q0-5 {
+  fill: rgb(254,240,217);
+}
+
+.q1-5 {
+  fill: rgb(253,204,138);
+}
+
+.q2-5 {
+  fill: rgb(252,141,89);
+}
+
+.q3-5 {
+  fill: rgb(227,74,51);
+}
+
+.q4-5 {
+  fill: rgb(179,0,0);
+}
