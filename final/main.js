@@ -1,4 +1,57 @@
 (function() {
+  var width = 960,
+      height = 600;
+
+  var svg = d3.select('body').append('svg')
+                             .attr('width', width)
+                             .attr('height', height);
+
+  var key = svg.append('g')
+               .attr('class', 'key');
+
+  for (var i = 0; i < 5; i++) {
+    key.append('text')
+       .attr('class', 'key-label')
+       .attr('x', 521 + 64 * i)
+       .attr('y', 50);
+    key.append('rect')
+       .attr('class', 'q' + i + '-5')
+       .attr('width', 64)
+       .attr('height', 10)
+       .attr('x', 535 + 64 * i)
+       .attr('y', 25);
+  }
+
+  key.append('text')
+       .attr('class', 'key-label')
+       .attr('x', 841)
+       .attr('y', 50);
+
+  key.append('text')
+     .attr('class', 'key-title')
+     .attr('x', 535)
+     .attr('y', 18);
+
+  var snap = key.append('g')
+                .attr('class', 'snap');
+
+  snap.append('rect')
+      .attr('class', 'snap-line')
+      .attr('width', 2)
+      .attr('height', 15)
+      .attr('x', 804)
+      .attr('y', 22.5);
+
+  snap.append('text')
+      .attr('class', 'snap-label')
+      .attr('x', 790)
+      .attr('y', 18);
+
+  snap.append('text')
+      .attr('class', 'snap-title')
+      .attr('x', 820)
+      .attr('y', 18);
+
   var G_PER_LB = 453.592;
 
   // all marketgroups
@@ -142,15 +195,9 @@
                   })
                   .map(csv);
 
-      var width = 960,
-          height = 600;
-
       var costs = _.map(marketgroups, function(mg) {
                     return qfahd[mg].monthlyCost(selected_age, selected_sex);
                   });
-      costs.sort();
-
-      console.log(costs);
 
       var quantile = d3.scale.quantile()
                              .domain(costs)
@@ -158,16 +205,31 @@
                                return 'q' + i + '-5';
                             }));
 
+      d3.select('.key-title')
+        .text('Monthly cost of Thrifty Food Plan');
+
+      d3.selectAll('.key-label')
+        .text(function(d, i) {
+          if (i === 0)
+            return '$' + _.min(costs).toFixed(0);
+          else if (i === 5)
+            return '$' + _.max(costs).toFixed(0);
+          else
+            return '$' + quantile.quantiles()[i-1].toFixed(0);
+        });
+
+      d3.select('.snap-label')
+        .text('$194');
+
+      d3.select('.snap-title')
+        .text('max. SNAP allotment');
+
       var projection = d3.geo.albersUsa()
                              .scale(1280)
                              .translate([width / 2, height / 2]);
 
       var path = d3.geo.path()
-          .projection(projection);
-
-      var svg = d3.select('body').append('svg')
-          .attr('width', width)
-          .attr('height', height);
+                       .projection(projection);
 
       svg.append('g')
          .attr('class', 'counties')
@@ -176,9 +238,9 @@
          .enter().append('path')
          .attr('class', function(d) {
            if (calcCost(d.id, selected_age, selected_sex))
-             return quantile(calcCost(d.id, selected_age, selected_sex));
+             return quantile(calcCost(d.id, selected_age, selected_sex)) + ' county';
            else
-             return null;
+             return 'county';
          })
          .attr('d', path);
 

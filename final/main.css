@@ -9,12 +9,11 @@ h1 {
 
 h4 {
   margin-top: 5px;
-  margin-bottom: 0;
   font-weight: 400;
 }
 
 a {
-  color: rgb(0,0,0);
+  color: rgb(252,141,89);
   text-decoration: none;
   background-image: linear-gradient(to bottom, rgba(0,0,0,0) 90%, rgba(119,123,145,0.6) 95%);
   transition: color 0.15s ease-in;
@@ -22,7 +21,7 @@ a {
 
 a:hover,
 a:focus {
-  color: rgb(252,141,89);
+  color: rgb(0,0,0);
 }
 
 svg {
@@ -38,6 +37,12 @@ svg {
   fill: none;
   stroke: rgb(255,255,255);
   stroke-linejoin: round;
+}
+
+.key-title,
+.key-label {
+  font: .75em 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  fill: rgb(136,136,136);
 }
 
 .q0-5 {
@@ -58,4 +63,18 @@ svg {
 
 .q4-5 {
   fill: rgb(179,0,0);
+}
+
+.snap-title,
+.snap-label {
+  font: .75em 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  fill: rgb(0,0,0);
+}
+
+.snap-title {
+  font-style: italic;
+}
+
+.snap-label {
+  font-weight: 700;
 }

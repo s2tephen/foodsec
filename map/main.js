@@ -110,7 +110,6 @@
           d3.select(this).transition().duration(300).style('opacity', 0.8);
           div.transition().duration(300).style('opacity', 0);
         });
-
     svg.append('path')
         .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
         .attr('class', 'states')
