@@ -1,5 +1,5 @@
-// (function() {
-  // setup map, key
+(function() {
+  // intialize drawing variables
   var width = 960,
       height = 600,
       bar_width = 64,
@@ -9,74 +9,11 @@
               .attr('width', width)
               .attr('height', height);
 
-  var key = svg.append('g')
-               .attr('class', 'key');
-
-  for (var i = 0; i < 5; i++) {
-    key.append('text')
-       .attr('class', 'key-label')
-       .attr('x', width * 0.535 + bar_width * i)
-       .attr('y', bar_height * 5);
-    key.append('rect')
-       .attr('class', 'q' + i + '-5')
-       .attr('width', bar_width)
-       .attr('height', bar_height)
-       .attr('x', width * 0.55 + bar_width * i)
-       .attr('y', bar_height * 2.5);
-  }
-
-  key.append('text')
-      .attr('class', 'key-label')
-      .attr('x', width * 0.535 + bar_width * i)
-      .attr('y', bar_height * 5);
-
-  key.append('text')
-     .attr('class', 'key-title')
-     .attr('x', width * 0.55)
-     .attr('y', bar_height * 1.75);
-
-  var snap = key.append('g')
-                .attr('class', 'snap');
-
-  // setup selectors
-  var selected_age = '19-50';
-  var selected_sex = 'f';
-
-  d3.select('.selector-sex')
-    .on('click', function() {
-      if (selected_sex === 'm') {
-        d3.select(this).text('female');
-        selected_sex = 'f';
-        redrawMap();
-      } else {
-        d3.select(this).text('male');
-        selected_sex = 'm';
-        redrawMap();
-      }
-    });
-
-  d3.select('.selector-age--closed')
-    .on('click', function() {
-      d3.select(this).attr('class', 'selector-age selector-age--open');
-    });
-
-  d3.selectAll('.selector-age > .selector-age-item')
-    .on('click', function() {
-      var selector = d3.select('.selector-age');
-      if (selector.classed('selector-age--open')) {
-        var target = d3.select(this);
-        selected_age = target.text();
-        d3.select('.selector-age-item--active').attr('class', 'selector-age-item');
-        target.attr('class', 'selector-age-item selector-age-item--active');
-        selector.attr('class','selector-age selector-age--closed');
-        d3.event.stopPropagation();
-        redrawMap();
-      }
-    });
-
   // initialize data variables
   var G_PER_LB = 453.592;
   var SNAP_MAX = 194;
+  var selected_age = '19-50';
+  var selected_sex = 'f';
 
   // all marketgroups
   var marketgroups = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19',
@@ -221,31 +158,48 @@
                   .map(csv);
 
       // draw key
-      d3.select('.key-title')
-        .text('Monthly cost');
+      var key = svg.append('g')
+                   .attr('class', 'key');
+
+      for (var i = 0; i < 5; i++) {
+        key.append('text')
+           .attr('class', 'key-label')
+           .attr('x', width * 0.535 + bar_width * i)
+           .attr('y', bar_height * 5);
+        key.append('rect')
+           .attr('class', 'q' + i + '-5')
+           .attr('width', bar_width)
+           .attr('height', bar_height)
+           .attr('x', width * 0.55 + bar_width * i)
+           .attr('y', bar_height * 2.5);
+      }
+
+      key.append('text')
+          .attr('class', 'key-label')
+          .attr('x', width * 0.535 + bar_width * i)
+          .attr('y', bar_height * 5);
+
+      key.append('text')
+         .attr('class', 'key-title')
+         .attr('x', width * 0.55)
+         .attr('y', bar_height * 1.75)
+         .text('Monthly cost');
+
+      var snap = key.append('g')
+                    .attr('class', 'snap');
 
       snap.append('rect')
         .attr('class', 'snap-line')
         .attr('width', 2)
-        .attr('height', bar_height * 1.5)
-        .attr('x', width * 0.55 + bar_width * snap_ratio)
-        .attr('y', bar_height * 2.25);
+        .attr('height', bar_height * 1.5);
 
       snap.append('text')
           .attr('class', 'snap-label')
-          .attr('x', width * 0.535 + bar_width * snap_ratio)
-          .attr('y', bar_height * 1.75);
+          .text('$' + SNAP_MAX);
 
       snap.append('text')
           .attr('class', 'snap-title')
-          .attr('x', width * 0.565 + bar_width * snap_ratio)
-          .attr('y', bar_height * 1.75);
-
-      d3.select('.snap-label')
-        .text('$' + SNAP_MAX);
-
-      d3.select('.snap-title')
-        .text('SNAP maximum');
+          .text('SNAP maximum');
 
       // create map
       var projection = d3.geo.albersUsa()
@@ -261,12 +215,7 @@
          .selectAll('path')
          .data(topojson.feature(us, us.objects.counties).features)
          .enter().append('path')
-         .attr('class', function(d) {
-           if (calcCost(d.id, selected_age, selected_sex))
-             return 'county ' + quantile(calcCost(d.id, selected_age, selected_sex));
-           else
-             return 'county';
-         })
+         .attr('class', 'county')
          .attr('d', path);
 
       // draw state boundaries
@@ -275,6 +224,40 @@
          .attr('class', 'states')
          .attr('d', path);
 
+      // setup selectors
+      d3.select('.selector-sex')
+        .on('click', function() {
+          if (selected_sex === 'm') {
+            d3.select(this).text('female');
+            selected_sex = 'f';
+            redrawMap();
+          } else {
+            d3.select(this).text('male');
+            selected_sex = 'm';
+            redrawMap();
+          }
+        });
+
+      d3.select('.selector-age--closed')
+        .on('click', function() {
+          d3.select(this).attr('class', 'selector-age selector-age--open');
+        });
+
+      d3.selectAll('.selector-age > .selector-age-item')
+        .on('click', function() {
+          var selector = d3.select('.selector-age');
+          if (selector.classed('selector-age--open')) {
+            var target = d3.select(this);
+            selected_age = target.text();
+            d3.select('.selector-age-item--active').attr('class', 'selector-age-item');
+            target.attr('class', 'selector-age-item selector-age-item--active');
+            selector.attr('class','selector-age selector-age--closed');
+            d3.event.stopPropagation();
+            redrawMap();
+          }
+        });
+
+      // load in data/selectors
       redrawMap();
     });
   }
@@ -339,4 +322,4 @@
       .attr('x', width * 0.565 + bar_width * snap_ratio)
       .attr('y', bar_height * 1.75);
   }
-// })();
+})();
