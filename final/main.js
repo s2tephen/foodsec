@@ -224,48 +224,6 @@
       d3.select('.key-title')
         .text('Monthly cost');
 
-      var costs = _.map(marketgroups, function(mg) {
-                    return qfahd[mg].monthlyCost(selected_age, selected_sex);
-                  });
-      costs.sort();
-
-      var quantile = d3.scale.quantile()
-                             .domain(costs)
-                             .range(d3.range(5).map(function(i) {
-                               return 'q' + i + '-5';
-                             }));
-
-      var thresholds = _.flatten([_.min(costs), quantile.quantiles(), _.max(costs)]);
-
-      d3.selectAll('.key-label')
-        .text(function(d, i) {
-          return '$' + thresholds[i].toFixed(0);
-        });
-
-      var snap_ratio,
-          snap_percentile;
-      var snap_nearest = _.findIndex(costs, function(value) {
-                           return SNAP_MAX < value;
-                         });
-
-      if (snap_nearest === -1) {
-        snap_percentile = 0;
-        snap_ratio = 5; // mark at end of key
-        d3.select('.summary-pct')
-          .text((snap_percentile * 100).toFixed(0) + '%');
-      }
-      else {
-        snap_percentile = (35 - snap_nearest) / 35; // % of counties over SNAP max
-        snap_ratio = 5 * (1 - snap_percentile);
-        d3.select('.summary-pct')
-          .text((snap_percentile * 100).toFixed(0) + '%');
-      }
-
-      d3.selectAll('.key-label')
-        .text(function(d, i) {
-          return '$' + thresholds[i].toFixed(0);
-        });
-
       snap.append('rect')
         .attr('class', 'snap-line')
         .attr('width', 2)
@@ -316,6 +274,8 @@
          .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
          .attr('class', 'states')
          .attr('d', path);
+
+      redrawMap();
     });
   }
 
@@ -372,11 +332,11 @@
       .attr('y', bar_height * 2.25);
 
     d3.select('.snap-label')
-        .attr('x', width * 0.535 + bar_width * snap_ratio)
-        .attr('y', bar_height * 1.75);
+      .attr('x', width * 0.535 + bar_width * snap_ratio)
+      .attr('y', bar_height * 1.75);
 
     d3.select('.snap-title')
-        .attr('x', width * 0.565 + bar_width * snap_ratio)
-        .attr('y', bar_height * 1.75);
+      .attr('x', width * 0.565 + bar_width * snap_ratio)
+      .attr('y', bar_height * 1.75);
   }
 // })();
