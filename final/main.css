@@ -127,10 +127,17 @@ svg {
   stroke-width: .25;
 }
 
+.county-outline {
+  fill: none;
+  stroke: rgb(0,0,0);
+  stroke-width: 1;
+}
+
 .states {
   fill: none;
   stroke: rgb(255,255,255);
   stroke-linejoin: round;
+  pointer-events: none;
 }
 
 .key-title,
@@ -174,4 +181,28 @@ svg {
 
 .snap-label {
   font-weight: 700;
+}
+
+.tooltip {
+  position: absolute;
+  width: 120px;
+  padding: 10px;
+  text-align: left;
+  background-color: rgb(255,255,255);
+  border: 1px solid rgb(204,204,204);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tooltip--visible {
+  display: block;
+}
+
+.tooltip > h6 > span {
+  font-weight: 700;
+}
+
+h6 {
+  margin: 0;
+  font-weight: 400;
 }

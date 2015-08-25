@@ -209,14 +209,33 @@
       var path = d3.geo.path()
                        .projection(projection);
 
-      // draw counties
+      // draw counties, tooltip interactions
       svg.append('g')
          .attr('class', 'counties')
          .selectAll('path')
          .data(topojson.feature(us, us.objects.counties).features)
          .enter().append('path')
          .attr('class', 'county')
-         .attr('d', path);
+         .attr('d', path)
+         .on('mouseover', function(d) {
+           d3.select('.tooltip-county')
+             .text(counties.get(d.id));
+           d3.select('.tooltip-cost')
+             .text('$' + calcCost(d.id, selected_age, selected_sex).toFixed(0));
+           d3.select('.tooltip')
+             .style("left", (d3.event.pageX + 10) + "px")
+             .style("top", (d3.event.pageY - 40) + "px")
+             .style('opacity', 1);
+           svg.append('path')
+              .attr('class', 'county-outline')
+              .attr('d', d3.select(this).attr('d'));
+         })
+         .on('mouseout', function(d) {
+           d3.select('.tooltip')
+             .style('opacity', 0);
+           d3.select('.county-outline')
+             .remove();
+         });
 
       // draw state boundaries
       svg.append('path')
@@ -229,10 +248,12 @@
         .on('click', function() {
           if (selected_sex === 'm') {
             d3.select(this).text('female');
+            d3.select('.toolip-sex').text('female');
             selected_sex = 'f';
             redrawMap();
           } else {
             d3.select(this).text('male');
+            d3.select('.toolip-sex').text('male');
             selected_sex = 'm';
             redrawMap();
           }
@@ -248,6 +269,7 @@
           var selector = d3.select('.selector-age');
           if (selector.classed('selector-age--open')) {
             var target = d3.select(this);
+            d3.select('.toolip-age').text(target.text());
             selected_age = target.text();
             d3.select('.selector-age-item--active').attr('class', 'selector-age-item');
             target.attr('class', 'selector-age-item selector-age-item--active');
