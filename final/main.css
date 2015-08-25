@@ -1,15 +1,104 @@
-h1, h4 {
+body {
   font-family: 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
-  text-align: center;
 }
 
 h1 {
-  margin-bottom: 0;
+  margin-bottom: .1em;
+  text-align: center;
+}
+
+.selector {
+  position: relative;
+  height: 2em;
+  font-size: 1.25em;
+  text-align: center;
+  margin-bottom: .25em;
+}
+
+.selector-sex,
+.selector-age {
+  padding: .1em .25em;
+  background-color: rgb(254,240,217);
+  border: 2px solid rgb(253,204,138);
+  border-radius: .25em;
+}
+
+.selector-sex,
+.selector-age-item {
+  background-image: none;
+}
+
+.selector-sex:hover,
+.selector-age--closed:hover > .selector-age-item--active,
+.selector-age--closed:hover > .selector-age-arrow {
+  color: rgb(227,74,51);
+  cursor: pointer;
+}
+
+.selector-age {
+  display: inline-block;
+}
+
+.selector-age-item {
+  display: none;
+  text-align: left;
+  transition: color 0.15s ease-in, background-color 0.15s ease-in;
+}
+
+.selector-age-item--active {
+  display: inline;
+}
+
+.selector-age--open {
+  position: absolute;
+  padding: 0;
+}
+
+.selector-age--open > .selector-age-item {
+  display: block;
+  padding: .1em .25em;
+  padding-right: .95em;
+}
+
+.selector-age--open > .selector-age-item:hover {
+  color: rgb(227,74,51);
+  background-color: rgb(253,204,138);
+  cursor: pointer;
+}
+
+.selector-age--open + span {
+  display: inline-block;
+  margin-top: 4px;
+
+  margin-left: 4.075em;
+}
+
+.selector-age-arrow {
+  position: relative;
+  top: -.125em;
+  font-size: .75em;
+  color: rgb(252,141,89);
+  transition: color 0.15s ease-in;
+}
+
+.selector-age--open > .selector-age-arrow {
+  display: none;
+}
+
+.summary {
+  margin-top: .5em;
+  font-size: 1.25em;
+  text-align: center;
+}
+
+.summary-pct {
+  font-weight: 700;
 }
 
 h4 {
-  margin-top: 5px;
+  margin-top: .5em;
   font-weight: 400;
+  text-align: center;
 }
 
 a {
@@ -33,6 +122,11 @@ svg {
   fill: none;
 }
 
+.county {
+  stroke: rgb(255,255,255);
+  stroke-width: .25;
+}
+
 .states {
   fill: none;
   stroke: rgb(255,255,255);
@@ -43,6 +137,13 @@ svg {
 .key-label {
   font: .75em 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   fill: rgb(136,136,136);
+}
+
+.key-lower,
+.key-upper {
+  font: .5em 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  text-transform: uppercase;
+  fill: rgb(204,204,204);
 }
 
 .q0-5 {
@@ -69,10 +170,6 @@ svg {
 .snap-label {
   font: .75em 'Karla', -apple-system-font, '.SFNSDisplay-Regular', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   fill: rgb(0,0,0);
-}
-
-.snap-title {
-  font-style: italic;
 }
 
 .snap-label {

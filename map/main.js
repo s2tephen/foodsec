@@ -56,13 +56,13 @@
   var path = d3.geo.path()
       .projection(projection);
 
-  var svg = d3.select('body').append('svg')
-      .attr('width', width)
-      .attr('height', height);
+  var svg = d3.select('svg')
+              .attr('width', width)
+              .attr('height', height);
 
-  var div = d3.select('body').append('div')
-                             .attr('class', 'tooltip')
-                             .style('opacity', 0);
+  var div = d3.select('svg')
+              .attr('class', 'tooltip')
+              .style('opacity', 0);
 
   queue()
       .defer(d3.json, 'data/us.json')

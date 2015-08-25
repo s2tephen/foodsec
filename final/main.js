@@ -1,10 +1,13 @@
-(function() {
+// (function() {
+  // setup map, key
   var width = 960,
-      height = 600;
+      height = 600,
+      bar_width = 64,
+      bar_height = 10;
 
-  var svg = d3.select('body').append('svg')
-                             .attr('width', width)
-                             .attr('height', height);
+  var svg = d3.select('svg')
+              .attr('width', width)
+              .attr('height', height);
 
   var key = svg.append('g')
                .attr('class', 'key');
@@ -12,47 +15,68 @@
   for (var i = 0; i < 5; i++) {
     key.append('text')
        .attr('class', 'key-label')
-       .attr('x', 521 + 64 * i)
-       .attr('y', 50);
+       .attr('x', width * 0.535 + bar_width * i)
+       .attr('y', bar_height * 5);
     key.append('rect')
        .attr('class', 'q' + i + '-5')
-       .attr('width', 64)
-       .attr('height', 10)
-       .attr('x', 535 + 64 * i)
-       .attr('y', 25);
+       .attr('width', bar_width)
+       .attr('height', bar_height)
+       .attr('x', width * 0.55 + bar_width * i)
+       .attr('y', bar_height * 2.5);
   }
 
   key.append('text')
-       .attr('class', 'key-label')
-       .attr('x', 841)
-       .attr('y', 50);
+      .attr('class', 'key-label')
+      .attr('x', width * 0.535 + bar_width * i)
+      .attr('y', bar_height * 5);
 
   key.append('text')
      .attr('class', 'key-title')
-     .attr('x', 535)
-     .attr('y', 18);
+     .attr('x', width * 0.55)
+     .attr('y', bar_height * 1.75);
 
   var snap = key.append('g')
                 .attr('class', 'snap');
 
-  snap.append('rect')
-      .attr('class', 'snap-line')
-      .attr('width', 2)
-      .attr('height', 15)
-      .attr('x', 804)
-      .attr('y', 22.5);
+  // setup selectors
+  var selected_age = '19-50';
+  var selected_sex = 'f';
 
-  snap.append('text')
-      .attr('class', 'snap-label')
-      .attr('x', 790)
-      .attr('y', 18);
+  d3.select('.selector-sex')
+    .on('click', function() {
+      if (selected_sex === 'm') {
+        d3.select(this).text('female');
+        selected_sex = 'f';
+        redrawMap();
+      } else {
+        d3.select(this).text('male');
+        selected_sex = 'm';
+        redrawMap();
+      }
+    });
 
-  snap.append('text')
-      .attr('class', 'snap-title')
-      .attr('x', 820)
-      .attr('y', 18);
+  d3.select('.selector-age--closed')
+    .on('click', function() {
+      d3.select(this).attr('class', 'selector-age selector-age--open');
+    });
 
+  d3.selectAll('.selector-age > .selector-age-item')
+    .on('click', function() {
+      var selector = d3.select('.selector-age');
+      if (selector.classed('selector-age--open')) {
+        var target = d3.select(this);
+        selected_age = target.text();
+        d3.select('.selector-age-item--active').attr('class', 'selector-age-item');
+        target.attr('class', 'selector-age-item selector-age-item--active');
+        selector.attr('class','selector-age selector-age--closed');
+        d3.event.stopPropagation();
+        redrawMap();
+      }
+    });
+
+  // initialize data variables
   var G_PER_LB = 453.592;
+  var SNAP_MAX = 194;
 
   // all marketgroups
   var marketgroups = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19',
@@ -95,15 +119,14 @@
   // fips -> marketgroup
   var mg = d3.map();
 
+  // fips -> county name
+  var counties = d3.map();
+
   // main datastore: marketgroup # -> foodgroup # -> cost per 100g
   var qfahd;
 
-  // defaults, call drawMap on change
-  var selected_age = '19-50';
-  var selected_sex = 'Female';
-
-  queue(1) // serial queue
-    .defer(d3.json, 'data/us.json') // load shapefile
+  queue(1) // load data
+    .defer(d3.json, 'data/us.json')
     .defer(d3.csv, 'data/historical_cpi.csv', function(d) { // load CPI data
       cpi.set(d['item'], {
         '2008': parseFloat(d['2008']),
@@ -132,25 +155,24 @@
       });
     })
     .defer(d3.csv, 'data/tfp_females.csv', function(d) { // load TFP for females
-      tfp_f.set(d['foodgroup'], {
-        '12-13': parseFloat(d['12-13 years']),
-        '14-18': parseFloat(d['14-18 years']),
-        '19-50': parseFloat(d['19-50 years']),
-        '51-70': parseFloat(d['51-70 years']),
-        '71+': parseFloat(d['71+ years'])
-      });
+      var entry = tfp_f.get(d['foodgroup']);
+      entry['12-13'] = parseFloat(d['12-13 years']);
+      entry['14-18'] = parseFloat(d['14-18 years']);
+      entry['19-50'] = parseFloat(d['19-50 years']);
+      entry['51-70'] = parseFloat(d['51-70 years']);
+      entry['71+'] = parseFloat(d['71+ years']);
     })
     .defer(d3.csv, 'data/tfp_males.csv', function(d) { // load TFP for males
-      tfp_m.set(d['foodgroup'], {
-        '12-13 years': parseFloat(d['12-13 years']),
-        '14-18 years': parseFloat(d['14-18 years']),
-        '19-50 years': parseFloat(d['19-50 years']),
-        '51-70 years': parseFloat(d['51-70 years']),
-        '71+ years': parseFloat(d['71+ years'])
-      });
+      var entry = tfp_m.get(d['foodgroup']);
+      entry['12-13'] = parseFloat(d['12-13 years']);
+      entry['14-18'] = parseFloat(d['14-18 years']);
+      entry['19-50'] = parseFloat(d['19-50 years']);
+      entry['51-70'] = parseFloat(d['51-70 years']);
+      entry['71+'] = parseFloat(d['71+ years']);
     })
-    .defer(d3.csv, 'data/fips2mg.csv', function(d) { // load marketgroups
+    .defer(d3.csv, 'data/counties.csv', function(d) { // load marketgroups, county names
       mg.set(d.fips, d.marketgroup);
+      counties.set(d.fips, d.name);
     })
     .await(drawMap);
 
@@ -166,21 +188,24 @@
 
   // draws the map
   function drawMap(error, us) {
+    // calculate monthly cost
     d3.csv('data/qfahd_recent.csv', function(csv) {
       qfahd = d3.nest()
                   .key(function(d) { return d.marketgroup; })
                   .rollup(function(values) {
                     return {
-                      monthlyCost: function(age, sex) { // calculate all the things
+                      monthlyCost: function(age, sex) { // returns monthly cost for given age, sex
                         return _.reduce(foodgroups, function(memo, value, key) {
                           var relevantValues = values.filter(function(d) {
                             return _.contains(value, parseInt(d.foodgroup));
                           });
                           var lbsPerWeek;
-                          if (sex === 'm')
+                          if (sex === 'm') {
                             lbsPerWeek = tfp_m.get(key)[age];
-                          else
+                          }
+                          else {
                             lbsPerWeek = tfp_f.get(key)[age];
+                          }
                           var pricePerHectogram = d3.min(relevantValues, function(d) {
                             var pctInflation = 1;
                             for (var year = parseInt(d.year); year < 2015; year++) {
@@ -195,35 +220,76 @@
                   })
                   .map(csv);
 
+      // draw key
+      d3.select('.key-title')
+        .text('Monthly cost');
+
       var costs = _.map(marketgroups, function(mg) {
                     return qfahd[mg].monthlyCost(selected_age, selected_sex);
                   });
+      costs.sort();
 
       var quantile = d3.scale.quantile()
                              .domain(costs)
                              .range(d3.range(5).map(function(i) {
                                return 'q' + i + '-5';
-                            }));
+                             }));
 
-      d3.select('.key-title')
-        .text('Monthly cost of Thrifty Food Plan');
+      var thresholds = _.flatten([_.min(costs), quantile.quantiles(), _.max(costs)]);
 
       d3.selectAll('.key-label')
         .text(function(d, i) {
-          if (i === 0)
-            return '$' + _.min(costs).toFixed(0);
-          else if (i === 5)
-            return '$' + _.max(costs).toFixed(0);
-          else
-            return '$' + quantile.quantiles()[i-1].toFixed(0);
+          return '$' + thresholds[i].toFixed(0);
         });
 
+      var snap_ratio,
+          snap_percentile;
+      var snap_nearest = _.findIndex(costs, function(value) {
+                           return SNAP_MAX < value;
+                         });
+
+      if (snap_nearest === -1) {
+        snap_percentile = 0;
+        snap_ratio = 5; // mark at end of key
+        d3.select('.summary-pct')
+          .text((snap_percentile * 100).toFixed(0) + '%');
+      }
+      else {
+        snap_percentile = (35 - snap_nearest) / 35; // % of counties over SNAP max
+        snap_ratio = 5 * (1 - snap_percentile);
+        d3.select('.summary-pct')
+          .text((snap_percentile * 100).toFixed(0) + '%');
+      }
+
+      d3.selectAll('.key-label')
+        .text(function(d, i) {
+          return '$' + thresholds[i].toFixed(0);
+        });
+
+      snap.append('rect')
+        .attr('class', 'snap-line')
+        .attr('width', 2)
+        .attr('height', bar_height * 1.5)
+        .attr('x', width * 0.55 + bar_width * snap_ratio)
+        .attr('y', bar_height * 2.25);
+
+      snap.append('text')
+          .attr('class', 'snap-label')
+          .attr('x', width * 0.535 + bar_width * snap_ratio)
+          .attr('y', bar_height * 1.75);
+
+      snap.append('text')
+          .attr('class', 'snap-title')
+          .attr('x', width * 0.565 + bar_width * snap_ratio)
+          .attr('y', bar_height * 1.75);
+
       d3.select('.snap-label')
-        .text('$194');
+        .text('$' + SNAP_MAX);
 
       d3.select('.snap-title')
-        .text('max. SNAP allotment');
+        .text('SNAP maximum');
 
+      // create map
       var projection = d3.geo.albersUsa()
                              .scale(1280)
                              .translate([width / 2, height / 2]);
@@ -231,6 +297,7 @@
       var path = d3.geo.path()
                        .projection(projection);
 
+      // draw counties
       svg.append('g')
          .attr('class', 'counties')
          .selectAll('path')
@@ -238,16 +305,78 @@
          .enter().append('path')
          .attr('class', function(d) {
            if (calcCost(d.id, selected_age, selected_sex))
-             return quantile(calcCost(d.id, selected_age, selected_sex)) + ' county';
+             return 'county ' + quantile(calcCost(d.id, selected_age, selected_sex));
            else
              return 'county';
          })
          .attr('d', path);
 
+      // draw state boundaries
       svg.append('path')
          .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
          .attr('class', 'states')
          .attr('d', path);
     });
   }
-})();
+
+  // redraws map after selector change
+  function redrawMap() {
+    // recolor map
+    var costs = _.map(marketgroups, function(mg) {
+                  return qfahd[mg].monthlyCost(selected_age, selected_sex);
+                });
+    costs.sort();
+
+    var quantile = d3.scale.quantile()
+                           .domain(costs)
+                           .range(d3.range(5).map(function(i) {
+                              return 'q' + i + '-5';
+                           }));
+
+    var thresholds = _.flatten([_.min(costs), quantile.quantiles(), _.max(costs)]);
+    d3.selectAll('.county')
+      .attr('class', function(d) {
+        if (calcCost(d.id, selected_age, selected_sex))
+          return 'county ' + quantile(calcCost(d.id, selected_age, selected_sex));
+        else
+          return 'county';
+      });
+
+    // update key
+    var snap_ratio,
+        snap_percentile;
+    var snap_nearest = _.findIndex(costs, function(value) {
+                         return SNAP_MAX < value;
+                       });
+
+    if (snap_nearest === -1) {
+      snap_percentile = 0;
+      snap_ratio = 5; // mark at end of key
+      d3.select('.summary-pct')
+        .text((snap_percentile * 100).toFixed(0) + '%');
+    }
+    else {
+      snap_percentile = (35 - snap_nearest) / 35; // % of counties over SNAP max
+      snap_ratio = 5 * (1 - snap_percentile);
+      d3.select('.summary-pct')
+        .text((snap_percentile * 100).toFixed(0) + '%');
+    }
+
+    d3.selectAll('.key-label')
+      .text(function(d, i) {
+        return '$' + thresholds[i].toFixed(0);
+      });
+
+    d3.select('.snap-line')
+      .attr('x', width * 0.55 + bar_width * snap_ratio)
+      .attr('y', bar_height * 2.25);
+
+    d3.select('.snap-label')
+        .attr('x', width * 0.535 + bar_width * snap_ratio)
+        .attr('y', bar_height * 1.75);
+
+    d3.select('.snap-title')
+        .attr('x', width * 0.565 + bar_width * snap_ratio)
+        .attr('y', bar_height * 1.75);
+  }
+// })();
