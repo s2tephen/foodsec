@@ -9,6 +9,7 @@
   </head>
   <body>
     <h1>The True Monthly Cost of the Thrifty Food Plan</h1>
+    <h4>by <a href="http://twitter.com/s2tephen">Stephen Suen</a> for <a href="http://web.mit.edu/11.188/www/index.html">11.188</a> (Urban Planning &amp; Social Science Laboratory), Spring 2015</h4>
     <div class="selector">
       For a minimally adequate level of nutrition each month, a <a class="selector-sex">female</a> aged
       <div class="selector-age selector-age--closed">
@@ -34,6 +35,40 @@
       In approximately <span class="summary-pct">11%</span> of U.S. counties, the maximum monthly SNAP allotment would be inadequate for that person.
     </div>
     <h4><strong>Sources:</strong> <a href="http://www.ers.usda.gov/data-products/quarterly-food-at-home-price-database.aspx">USDA Quarterly Food-at-Home Price Database</a>, <a href="http://www.cnpp.usda.gov/sites/default/files/usda_food_plans_cost_of_food/TFP2006Report.pdf">Thrifty Food Plan</a>, <a href="http://www.ers.usda.gov/data-products/food-price-outlook.aspx">Food Price Outlook</a></h4>
+    <p>
+      As defined in the World Food Summit of 1996, the goal of food security is to ensure that "all people at all times have access to sufficient, safe, nutritious food to maintain a healthy and active life." Since then, much of the public’s attention and discussion around eradicating poverty and ending hunger has been in the context of the developing world, through initiatives like the UN’s Millennium Development Goals. However, food insecurity is a problem everywhere — even in the developed world — and the United States is no exception. According to a study conducted by the USDA, 14.3% of U.S. households were food-insecure during 2013: at some time during the year, they were "unable to acquire adequate food for one or more household members because they had insufficient money and other resources for food."
+    </p>
+    <p>
+      To alleviate the problem, the U.S. government maintains a number of public assistance programs. Since the Great Depression, national food stamp programs have helped low income Americans pay for food. Today, SNAP (the Supplemental Nutrition Assistance Program) pays out nearly $70 billion in benefits to 46.5 million people annually. In order to determine how much each household needs in food stamps, the USDA uses the Thrifty Food Plan, a standard market basket of items across food groups to serve as a "minimum" weekly diet for adequate nutrition. Every year, the USDA calculates the total cost of these items; this is used to determine SNAP’s maximum monthly allotment — the largest amount in benefits a household can receive per month. The USDA then subtracts 30% of each SNAP household’s net monthly income from this allotment, as recipients are expected to spend 30% of their own earnings on food.
+    </p>
+    <h2>monthly SNAP benefits = (cost of Thrifty Food Plan * weeks per month) — (0.3 * monthly income)</h2>
+    <p>
+      The maximum monthly allotment is recalculated annually in order to keep up with changes in the consumer price index. While SNAP does take into account variation in food prices due to inflation, it doesn't factor in potential differences in local food prices. In this calculation, the cost of the Thrifty Food Plan is determined on a national level. This methodology assumes that food costs the same regardless of where you are in the country. Cross-referencing local food price data with the Thrifty Food Plan shows that the current maximum SNAP allotment of $194 is only truly adequate nationwide for children under the age of 9 and teenage girls. The Thrifty Food Plan is most expensive in New England, South Florida, the San Francisco Bay Area, outlying areas of New York, and Maryland. Together, these areas usually make up the top 20% of counties in terms of cost. In the South and Midwest, the Thrifty Food Plan tends to be cheapest — in these regions, SNAP benefits more than cover the cost of food each month.
+    </p>
+    <p>
+      In particular, SNAP benefits are largely inadequate for men aged 19-50 — in 63% of U.S. counties, $194 per month would be inadequate to pay for the Thrifty Food Plan. In 40% of U.S. counties, the maximum SNAP allotment does not fully cover the recommended diet for women aged 51-70. Looking at the map, it becomes clear how large the disparity is in local food pricing. From a policy perspective, it suggests that the USDA should implement a new formula that is actually tied to regional costs rather than assuming that the Thrifty Food Plan market basket is the same everywhere in the country. Alaska, Hawaii, and the U.S. Territories have different SNAP allotment amounts, indicating an awareness that geography does matter. The next step is to extend this policy to the contiguous United States and calculate the maximum monthly allotment on a state-by-state (or at least regional) basis. This way, we can guarantee that everyone on SNAP can truly afford the Thrifty Food Plan’s minimum level of nutrition.
+    </p>
+    <p>
+      <strong>Methodology</strong><br>
+      This map is based on <a href="http://www.cnpp.usda.gov/sites/default/files/usda_food_plans_cost_of_food/TFP2006Report.pdf">Thrifty Food Plan</a>, which lists weekly recommended amounts by food group for different ages/sexes. The next dataset is the <a href="http://www.ers.usda.gov/data-products/quarterly-food-at-home-price-database.aspx">USDA Quarterly Food-at-Home Price Database</a>, which lists the prices of various food groups around the U.S. based on Nielsen Homescan consumer data. The required weekly (and thus monthly) expenditure is calculated by combining these two datasets. Only the latest price for each food group is used, adjusted for inflation using the food group-specific CPIs from the <a href="http://www.ers.usda.gov/data-products/food-price-outlook.aspx">Food Price Outlook</a>. The three data sets have slightly different levels of granularity in their food groups (e.g. "dark green vegetables" vs. "fresh/frozen dark green vegetables" and "canned dark green vegetables"), so these food groups are matched as closely as possible. When combining multiple food groups, the minimum is used rather than the average, representing the "worst-case scenario" (the cheapest possible purchases that meet the Thrifty Food Plan criteria).
+    </p>
+    <h2>true monthly cost = Food-at-Home price ($/100g) * Thrifty Food Plan amount (lb/wk) * 453.6 g/lb * 4 wk/mo</h2>
+    <p>Using dimensional analysis, the combined price of the entire Thrifty Food Plan is converted to a monthly cost ($/mo) for each combination of age and sex. The Food-at-Home Price Database is not divided by county or state, but by Nielsen's "market groups" — luckily, the dataset includes mappings between FIPS codes and market groups. For some reason Sanborn, SD is randomly excluded from this file, hence the empty space in the map. Alaska and Hawaii are also not present in the database. The available data is divided into quintiles (each representing 20% of U.S. counties), and the choropleth is drawn and colored according to this classification scheme. The percentile of $194, the maximum SNAP allotment, is calculated for each distribution based on the <a href="https://en.wikipedia.org/wiki/Percentile#The_Nearest_Rank_method">Nearest Rank method</a>. For the purposes of this graphic, all percentages and dollar values are rounded to the nearest whole number. Much of this analysis is heavily inspired by <a href="http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1850545">Gregory and Coleman-Jensen (2012)</a> — read their paper for more detailed analysis.</p>
+    <div class="promo">
+      <img src="snap_judgments.png">
+      <h2>
+        Want to learn more about the<br>
+        human side of food (in)security?<br><br>
+        <strong>SNAP Judgments</strong>,<br>
+        a choose-your-own-adventure game<br>
+        where you must survive on food stamps.<br><br>
+        <a href="http://philome.la/s2tephen/cms631-final/play">Play now &rarr;</a>
+      </h2>
+      <h4>
+        <strong>Note:</strong> This game is only a prototype —<br>
+        expect bugs and a general lack of instruction.
+      </h4>
+    </div>
 
     <script src="underscore-min.js"></script>
     <script src="d3.min.js"></script>

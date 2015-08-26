@@ -224,11 +224,16 @@
              .text('$' + calcCost(d.id, selected_age, selected_sex).toFixed(0));
            d3.select('.tooltip')
              .style("left", (d3.event.pageX + 10) + "px")
-             .style("top", (d3.event.pageY - 40) + "px")
+             .style("top", (d3.event.pageY - 15) + "px")
              .style('opacity', 1);
            svg.append('path')
               .attr('class', 'county-outline')
               .attr('d', d3.select(this).attr('d'));
+         })
+         .on('mousemove', function(d) {
+           d3.select('.tooltip')
+             .style("left", (d3.event.pageX + 10) + "px")
+             .style("top", (d3.event.pageY - 15) + "px");
          })
          .on('mouseout', function(d) {
            d3.select('.tooltip')
@@ -273,11 +278,19 @@
             selected_age = target.text();
             d3.select('.selector-age-item--active').attr('class', 'selector-age-item');
             target.attr('class', 'selector-age-item selector-age-item--active');
-            selector.attr('class','selector-age selector-age--closed');
+            selector.attr('class', 'selector-age selector-age--closed');
             d3.event.stopPropagation();
             redrawMap();
           }
         });
+
+        d3.select('body')
+          .on('click', function() {
+            var selector = d3.select('.selector-age');
+            if (selector.classed('.selector-age--open')) {
+              selector.attr('class', 'selector-age selector-age--closed');
+            }
+          });
 
       // load in data/selectors
       redrawMap();

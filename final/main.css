@@ -7,6 +7,21 @@ h1 {
   text-align: center;
 }
 
+h4:first-of-type {
+  margin-bottom: .5em;
+}
+
+h2:first-of-type {
+  margin-top: 0;
+}
+
+h2 {
+  margin-bottom: 1em;
+  font-size: 1.25em;
+  font-weight: 400;
+  text-align: center;
+}
+
 .selector {
   position: relative;
   height: 2em;
@@ -87,6 +102,7 @@ h1 {
 
 .summary {
   margin-top: .5em;
+  margin-bottom: .5em;
   font-size: 1.25em;
   text-align: center;
 }
@@ -96,7 +112,8 @@ h1 {
 }
 
 h4 {
-  margin-top: .5em;
+  margin-top: 0;
+  margin-bottom: 1.5em;
   font-weight: 400;
   text-align: center;
 }
@@ -192,6 +209,7 @@ svg {
   border: 1px solid rgb(204,204,204);
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.15s ease-in 0.15s;
 }
 
 .tooltip--visible {
@@ -205,4 +223,27 @@ svg {
 h6 {
   margin: 0;
   font-weight: 400;
+}
+
+p {
+  width: 640px;
+  margin: 0 auto 1.25em;
+  font-size: 1em;
+  line-height: 1.75em;
+}
+
+.promo {
+  width: 960px;
+  margin: auto;
+}
+
+.promo > img {
+  width: 480px;
+  float: left;
+}
+
+.promo > h2 {
+  margin-top: 90px;
+  width: 480px;
+  float: right;
 }
