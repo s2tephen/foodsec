@@ -237,9 +237,13 @@ p {
   margin: auto;
 }
 
-.promo > img {
-  width: 480px;
+.promo-img {
   float: left;
+  background: none;
+}
+
+.promo-img > img {
+  width: 480px;
 }
 
 .promo > h2 {
