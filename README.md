@@ -1,5 +1,5 @@
 # Food Security
-Visualizations based on USDA's Quarterly Food-at-Home Price Database and other food security-related datasets, created for [CMS.631 (Data Storytelling Studio)](http://cms631.datatherapy.org). These projects were iterations on the same concept/data, but explored different means of presentation and got better in fidelity.
+Visualizations based on USDA's Quarterly Food-at-Home Price Database and other food security-related datasets, created for [CMS.631 (Data Storytelling Studio)](http://cms631.datatherapy.org) and [11.188 (Urban Planning and Social Science Laboratory)](http://web.mit.edu/11.188/www/index.html). These projects were iterations on the same concept/data, but explored different means of presentation and got better in fidelity.
 
 ## [Small Multiples Line Chart](http://stephensuen.com/foodsec/smlines)
 
@@ -13,4 +13,4 @@ Here, we combined the Quarterly Food-at-Home Price Database dataset with the USD
 
 ## [Final](http://stephensuen.com/foodsec/final)
 
-This iteration happened after the end of the class. There's no full d3 visualization for this quite yet – I was mostly using the library for the actual data crunching/applying of formulas. This took the same approach from the previous map but applied it to all food groups. The data was then loaded into ArcGIS and turned into a static map (interactive version coming soon). The goal here was to compare the actual cost of the Thrifty Food Plan (variable depending on where you live, due to variation in food prices) to the amount being allotted for SNAP benefits (a fixed amount). We can then see where in the U.S. SNAP is inadequate and where it is more than adequate.
+This iteration took the same approach from the previous map but applied it to all food groups. The data was then loaded into ArcGIS and turned into a interactive choropleth map using D3/GeoJSON. The data is filterable by sex/age and then split into quintiles for easy reading/analysis. The goal here was to compare the actual cost of the Thrifty Food Plan (variable depending on where you live, due to variation in food prices) to the amount being allotted for SNAP benefits (a fixed amount). We can then see where in the U.S. SNAP is inadequate and where it is more than adequate.
