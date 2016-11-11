@@ -56,11 +56,13 @@
   var path = d3.geo.path()
       .projection(projection);
 
-  var svg = d3.select('svg')
+  var svg = d3.select('body')
+              .append('svg')
               .attr('width', width)
               .attr('height', height);
 
-  var div = d3.select('svg')
+  var div = d3.select('body')
+              .append('div')
               .attr('class', 'tooltip')
               .style('opacity', 0);
 
